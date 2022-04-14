@@ -21,13 +21,15 @@ const Input = ({placeholder, name, type, value, handleChange}) => (
 );
 
 const Welcome = () => {
-  const { value } = useContext(TransactionContext);
+  const {connectWallet, currentAccount, formData, handleChange, sendTransaction} = useContext(TransactionContext);
 
-  console.log(value);
-
-  const connectWallet = () => {};
-
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+    const {addressTo, amount, keyword, message} = formData;
+    e.preventDefault();
+    if (!addressTo || !amount || !keyword || !message) 
+      return;
+    sendTransaction();
+  };
 
   return (
     <div className="flex w-full justify-center items-center">
@@ -41,13 +43,13 @@ const Welcome = () => {
             Explore the crypto world. Buy and sell cryptocurrencies easily on
             krypto
           </p>
-          <button
+          {!currentAccount && <button
             type="button"
             className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd"
             onClick={connectWallet}
           >
             <p className="text-white text-base font-semibold">Connect Wallet</p>
-          </button>
+          </button>}
           <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
             <div className={`rounded-tl-2xl ${commonStyles}`}>Reliability</div>
             <div className={` ${commonStyles}`}>Security</div>
@@ -75,12 +77,12 @@ const Welcome = () => {
             </div>
           </div>
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
-            <Input placeholder="Address to" name="addressTo" type="text" handleChange={() => {}} />
-            <Input placeholder="Amount (ETH) to" name="amount" type="number" handleChange={() => {}} />
-            <Input placeholder="Keyword (GIF)" name="keyword" type="text" handleChange={() => {}} />
-            <Input placeholder="Enter message" name="message" type="text" handleChange={() => {}} />
+            <Input placeholder="Address to" name="addressTo" type="text" handleChange={handleChange} />
+            <Input placeholder="Amount (ETH) to" name="amount" type="number" handleChange={handleChange} />
+            <Input placeholder="Keyword (GIF)" name="keyword" type="text" handleChange={handleChange} />
+            <Input placeholder="Enter message" name="message" type="text" handleChange={handleChange} />
             <div className="h-[1px] w-full bg-gray-400 my-2" />
-            {true ? (
+            {false ? (
               <Loader />
             ) : (
               <button
