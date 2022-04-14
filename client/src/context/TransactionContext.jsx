@@ -41,7 +41,6 @@ export const TransactionProvider = ({ children }) => {
           keyword: transaction.keyword,
           amount: parseInt(transaction.amount._hex)/(10 ** 18),
         }));
-        console.log(structuredTransactions);
         setTransactions(structuredTransactions);
     } catch (error) {
       console.log(error);
@@ -60,7 +59,6 @@ export const TransactionProvider = ({ children }) => {
       } else {
         console.log('No accounts found');
       }
-      console.log(accounts);
     } catch (error) {
       console.log(error);
       throw new Error("No Ethereum object");
@@ -92,7 +90,6 @@ export const TransactionProvider = ({ children }) => {
 
   const sendTransaction = async () => {
     try {
-      console.log('hello in sendTransaction')
       if (!ethereum)
         return alert("Please install metamask");
 
@@ -111,10 +108,8 @@ export const TransactionProvider = ({ children }) => {
       });
       const transactionHash = await transactionContract.addToBlockChain(addressTo, parsedAmount, message, keyword);
       setIsLoading(true);
-      console.log(`Loading - ${transactionHash.hash}`);
       await transactionHash.wait();
       setIsLoading(false);
-      console.log(`Success - ${transactionHash.hash}`);
       const transactionCount = await transactionContract.getTransactionCount();
       setTransactionCount(transactionCount.toNumber());
       location.reload();
